@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trending Topics</title>
+    <link rel="stylesheet" href="trending.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="rag.html">DOC BUDDY</a></li>
+                <li><a href="resources.html">ALL YOU WANT</a></li>
+                <li><a href="chatbot.html">ANY QUE?</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="trending-container">
+        <h1>Trending Topics</h1>
+        <div class="card-container" id="card-container">
+            <!-- Cards will be dynamically added here -->
+        </div>
+    </section>
+
+    <script>
+        // List of trending topics (you can expand this list)
+        const trendingTopics = [
+            { title: "Artificial Intelligence", description: "Explore the latest advancements in AI." },
+            { title: "Machine Learning", description: "Learn about algorithms and models in ML." },
+            { title: "Data Science", description: "Discover the world of data analysis and visualization." },
+            { title: "Web Development", description: "Stay updated with modern web technologies." },
+            { title: "Blockchain", description: "Understand the future of decentralized systems." },
+            { title: "Cybersecurity", description: "Learn how to protect systems and data." },
+            { title: "Cloud Computing", description: "Explore cloud services and infrastructure." },
+            { title: "Quantum Computing", description: "Dive into the next generation of computing." },
+            { title: "Internet of Things (IoT)", description: "Connect and automate devices with IoT." },
+            { title: "Robotics", description: "Discover the world of automation and robotics." }
+        ];
+
+        // Function to shuffle the array (Fisher-Yates algorithm)
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // Function to display trending topics
+        function displayTrendingTopics() {
+            const cardContainer = document.getElementById('card-container');
+            const shuffledTopics = shuffleArray(trendingTopics).slice(0, 6); // Display 6 random topics
+
+            shuffledTopics.forEach(topic => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <h3>${topic.title}</h3>
+                    <p>${topic.description}</p>
+                `;
+                cardContainer.appendChild(card);
+            });
+        }
+
+        // Display topics when the page loads
+        displayTrendingTopics();
+    </script>
+
+    <footer>
+        <p>&copy; 2025 AI-Powered Doubt Solver</p>
+    </footer>
+</body>
+</html>

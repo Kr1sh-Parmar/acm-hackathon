@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resources</title>
+    <link rel="stylesheet" href="resources.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="rag.html">DOC BUDDY</a></li>
+                <li><a href="trending.html">Trending</a></li>
+                <li><a href="chatbot.html">ANY QUE?</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="resources-container">
+        <h1>Resource Recommendations</h1>
+        <form id="resource-form">
+            <input type="text" id="query" placeholder="Enter your query">
+            <button type="submit">Search</button>
+        </form>
+        <div id="results"></div>
+    </section>
+
+    <script>
+        const YOUTUBE_API_KEY = 'API 2'; // Replace with your YouTube API Key
+        const GOOGLE_API_KEY = 'API 3'; // Replace with your Google API Key
+        const GOOGLE_CX = 'API 4'; // Replace with your Google Custom Search Engine ID
+        document.getElementById('resource-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const query = document.getElementById('query').value;
+            fetchResources(query);
+        });
+
+        async function fetchResources(query) {
+            const results = document.getElementById('results');
+            results.innerHTML = '<p>Loading...</p>';
+
+            try {
+                // Fetch YouTube videos
+                const youtubeVideos = await fetchYouTubeVideos(query);
+                // Fetch Google search results
+                const googleResults = await fetchGoogleResults(query);
+
+                // Display results
+                results.innerHTML = `
+                    <h2>YouTube Videos</h2>
+                    ${youtubeVideos.map(video => `
+                        <div class="resource-card">
+                            <h3>${video.snippet.title}</h3>
+                            <p>${video.snippet.description}</p>
+                            <a href="https://www.youtube.com/watch?v=${video.id.videoId}" target="_blank">Watch Video</a>
+                        </div>
+                    `).join('')}
+
+                    <h2>Google Search Results</h2>
+                    ${googleResults.map(result => `
+                        <div class="resource-card">
+                            <h3>${result.title}</h3>
+                            <p>${result.snippet}</p>
+                            <a href="${result.link}" target="_blank">Visit Page</a>
+                        </div>
+                    `).join('')}
+                `;
+            } catch (error) {
+                results.innerHTML = `<p>Error fetching resources: ${error.message}</p>`;
+            }
+        }
+
+        async function fetchYouTubeVideos(query) {
+            const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${query}&key=${YOUTUBE_API_KEY}&maxResults=5`;
+            const response = await fetch(url);
+            const data = await response.json();
+            return data.items;
+        }
+
+        async function fetchGoogleResults(query) {
+            const url = `https://www.googleapis.com/customsearch/v1?q=${query}&key=${GOOGLE_API_KEY}&cx=${GOOGLE_CX}`;
+            const response = await fetch(url);
+            const data = await response.json();
+            return data.items;
+        }
+    </script>
+
+    <footer>
+        <p>&copy; 2025 AI-Powered Doubt Solver</p>
+    </footer>
+</body>
+</html>
